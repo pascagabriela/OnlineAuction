@@ -27,12 +27,12 @@ public class ProductServiceController {
         this.productServiceDAO = productServiceDAO;
     }
 
-    @RequestMapping(value = "/products")
+    @RequestMapping(value = "/home/products")
     public ResponseEntity<Object> getProducts() {
         return new ResponseEntity<>(productRepository.findAll().stream().map(o -> new ProductDTO(o.getId(), o.getProduct_name(), o.getPrice(), o.getDescription(), o.getImage(), o.getType())).collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/product_create", method = RequestMethod.POST)
+    @RequestMapping(value = "/authenticated/product_create", method = RequestMethod.POST)
     public ResponseEntity<Object> createProduct(@RequestBody ProductDTO productDTO) {
         productsMap.put(productDTO.getId(), productDTO);
         Product product = new Product();
@@ -45,12 +45,12 @@ public class ProductServiceController {
         return new ResponseEntity<>("Product created", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/home/products/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProduct(@PathVariable("id") Long id) {
         return new ResponseEntity<>(productRepository.findById(id).map(p -> new ProductDTO(p.getId(), p.getProduct_name(), p.getPrice(), p.getDescription(), p.getImage(), p.getType())).orElse(null), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/authenticated/products/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Object> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO productDTO) {
         productRepository.findById(id).ifPresent(p -> {
             p.setProduct_name(productDTO.getProduct_name());
@@ -65,7 +65,7 @@ public class ProductServiceController {
         return new ResponseEntity<>("Product updated", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/authenticated/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") Long id) {
         ProductDTO remove = productsMap.remove(id);
         productRepository.deleteById(id);

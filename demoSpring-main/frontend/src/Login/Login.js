@@ -38,10 +38,18 @@ class Login extends Component{
 
     handleSubmit(event) {
         event.preventDefault();
-        const {user, setUser} = this.state;
-        fetch("http://localhost:8080/login")
-            .then((response) => response.json())
-            .then((data) => console.log(data));
+        const {item} = this.state;
+        console.log(item);
+        fetch('/home/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item),
+        }).then((response)=>response.text()).then((result)=>{
+            console.log(result);
+        });
     }
 
 
@@ -59,8 +67,10 @@ class Login extends Component{
                             <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
                             <p className="text-black-50 mb-5">Please enter your email and password</p>
 
-                            <MDBInput name={item.email} onChange={this.handleChange} wrapperClass='mb-4 mx-5 w-100' labelClass='text-black-50' label='Email address' id='formControlLg1' type='email' size="lg"/>
-                            <MDBInput name={item.password} onChange={this.handleChange} wrapperClass='mb-4 mx-5 w-100' labelClass='text-black-50' label='Password' id='formControlLg2' type='password' size="lg"/>
+                            <MDBInput value={item.email} onChange={this.handleChange} wrapperClass='mb-4 mx-5 w-100' labelClass='text-black-50'
+                                      label='Email address' id='email' name="email" type='email' size="lg" required/>
+
+                            <MDBInput value={item.password} onChange={this.handleChange} wrapperClass='mb-4 mx-5 w-100' labelClass='text-black-50' label='Password' id='password' type='password' name="password" size="lg" required/>
                             <MDBBtn outline className='mx-2 px-5 text-blue' size='lg' type="submit">
                                 Login
                             </MDBBtn>

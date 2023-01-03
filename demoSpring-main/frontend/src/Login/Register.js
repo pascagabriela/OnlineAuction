@@ -39,7 +39,7 @@ class Register extends Component {
         const {item} = this.state;
 
         if(item.password === item.confirmpassword){
-            await fetch('/user_create', {
+            await fetch('/home/user_create', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

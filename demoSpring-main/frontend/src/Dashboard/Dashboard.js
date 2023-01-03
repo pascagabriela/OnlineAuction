@@ -21,7 +21,7 @@ function Dashboard() {
     const [product, setProduct] = useState([]);
     useEffect(() => {
 
-        fetch("http://localhost:8080/products")
+        fetch("http://localhost:8080/home/products")
             .then((response) => response.json())
             .then((data) => setProduct(data));
 

@@ -16,7 +16,7 @@ const Cameras = () => {
     const [product, setProduct] = useState([]);
     useEffect(() => {
 
-        fetch("http://localhost:8080/products")
+        fetch("http://localhost:8080/home/products")
             .then((response) => response.json())
             .then((data) => setProduct(data));
 
@@ -30,11 +30,11 @@ const Cameras = () => {
                     {product.map((product) => {
                         if (product.type === 14) {
                             return <MDBCol md='3'>
-                                <MDBCard>
-                                    <MDBCardImage key={product.id} src={product.image} position='top' width="100px" height="200px" object-fit="cover"/>
+                                <MDBCard key={product.id}>
+                                    <MDBCardImage  src={product.image} position='top' width="100px" height="200px" object-fit="cover"/>
                                     <MDBCardBody>
-                                        <MDBCardTitle key={product.id}>{product.product_name}</MDBCardTitle>
-                                        <MDBCardText key={product.id}>{product.description}</MDBCardText>
+                                        <MDBCardTitle >{product.product_name}</MDBCardTitle>
+                                        <MDBCardText >{product.description}</MDBCardText>
                                         <MDBBtn href='#' color="black 50">See more</MDBBtn>
                                     </MDBCardBody>
                                 </MDBCard> <br></br></MDBCol>

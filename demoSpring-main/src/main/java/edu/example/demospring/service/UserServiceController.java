@@ -1,6 +1,7 @@
 package edu.example.demospring.service;
 
 import edu.example.demospring.dao.UserServiceDAO;
+import edu.example.demospring.model.LoginDTO;
 import edu.example.demospring.model.UserDTO;
 import edu.example.demospring.persitence.User;
 import edu.example.demospring.repository.UserRepository;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping(value = "/home")
 public class UserServiceController {
     private static Map<Long, UserDTO> usersMap = new HashMap<>();
 
@@ -70,8 +72,8 @@ public class UserServiceController {
         return new ResponseEntity<>(Optional.ofNullable(remove).map(p -> "User deleted").orElse("User not found"), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResponseEntity<Object> loginUser(){
-        return new ResponseEntity<>(userRepository.findAll().stream().map(o -> new UserDTO(o.getId(), o.getFirst_name(), o.getLast_name(), o.getEmail(), o.getPhone(), o.getPassword())).collect(Collectors.toList()), HttpStatus.OK);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String loginUser(@RequestBody LoginDTO loginDTO){
+        return loginDTO.email;
     }
 }
