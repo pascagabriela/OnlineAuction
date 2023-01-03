@@ -205,7 +205,7 @@ export default class AppNavbar extends Component {
                             <MDBDropdownMenu>
                                 <MDBDropdownItem link>Profile</MDBDropdownItem>
                                 <MDBDropdownItem link>Settings</MDBDropdownItem>
-                                <MDBDropdownItem link>Sell products</MDBDropdownItem>
+                                <MDBDropdownItem link href="/sell">Sell products</MDBDropdownItem>
                                 <MDBDropdownItem divider />
                                 <MDBDropdownItem link onClick={localStorage.removeItem('jwt')} href="/">Log out</MDBDropdownItem>
                             </MDBDropdownMenu>

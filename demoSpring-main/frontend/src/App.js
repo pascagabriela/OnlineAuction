@@ -9,6 +9,7 @@ import VideoGames from "./Products/Electronics/VideoGames";
 import Computer from "./Products/Electronics/Computer";
 import Cameras from "./Products/Electronics/Cameras";
 import UnloggedDashboard from "./Dashboard/UnloggedDashboard";
+import SellProduct from "./SellProduct/SellProduct";
 
 class App extends Component {
     // state = {
@@ -33,6 +34,7 @@ class App extends Component {
                     <Route path='/videogames'><VideoGames/></Route>
                     <Route path='/computer'><Computer/></Route>
                     <Route path='/cameras'><Cameras/></Route>
+                    <Route path='/sell'><SellProduct/></Route>
                     {/*<Route path='/products' exact={true}><ProductList/></Route>*/}
                     {/*<Route path='/products/:id'><ProductEdit/></Route>*/}
                 </Switch>
