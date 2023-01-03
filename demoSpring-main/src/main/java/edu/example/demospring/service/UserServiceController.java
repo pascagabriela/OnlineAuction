@@ -5,8 +5,11 @@ import edu.example.demospring.model.LoginDTO;
 import edu.example.demospring.model.UserDTO;
 import edu.example.demospring.persitence.User;
 import edu.example.demospring.repository.UserRepository;
+import edu.example.demospring.security.JwtTokenUtil;
+import edu.example.demospring.security.MyUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,16 +18,19 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/home")
 public class UserServiceController {
-    private static Map<Long, UserDTO> usersMap = new HashMap<>();
+    private static final Map<Long, UserDTO> usersMap = new HashMap<>();
+
+    private final PasswordEncoder passwordEncoder;
 
     final UserRepository userRepository;
 
     final UserServiceDAO userServiceDAO;
 
 
-    public UserServiceController(UserRepository userRepository, UserServiceDAO userServiceDAO) {
+    public UserServiceController(UserRepository userRepository, UserServiceDAO userServiceDAO, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userServiceDAO = userServiceDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping(value = "/users")
@@ -40,7 +46,7 @@ public class UserServiceController {
         user.setLast_name(userDTO.getLast_name());
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
         return new ResponseEntity<>("User created", HttpStatus.OK);
     }
@@ -73,7 +79,15 @@ public class UserServiceController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginUser(@RequestBody LoginDTO loginDTO){
-        return loginDTO.email;
+    public String loginUser(@RequestBody LoginDTO loginDTO) {
+        if (userRepository.findByEmail(loginDTO.email) == null) {
+            return "This user doesn't exist!";
+        }
+        if (!passwordEncoder.matches(loginDTO.password, userRepository.findByEmail(loginDTO.email).getPassword())) {
+            return "Wrong password! Please try again!";
+        }
+        JwtTokenUtil token = new JwtTokenUtil();
+        MyUserDetails userDetails = new MyUserDetails(userRepository.findByEmail(loginDTO.email));
+        return token.generateToken(userDetails);
     }
 }

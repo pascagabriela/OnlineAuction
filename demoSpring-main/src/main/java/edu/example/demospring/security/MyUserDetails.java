@@ -1,6 +1,6 @@
 package edu.example.demospring.security;
 
-import edu.example.demospring.model.UserDTO;
+import edu.example.demospring.persitence.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,7 +17,7 @@ public class MyUserDetails implements UserDetails {
     private String password;
     private String phone;
 
-    public MyUserDetails(UserDTO user){
+    public MyUserDetails(User user){
         id=user.getId();
         email=user.getEmail();
         firstName=user.getFirst_name();

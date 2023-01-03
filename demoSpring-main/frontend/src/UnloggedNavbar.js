@@ -196,36 +196,9 @@ export default class AppNavbar extends Component {
                     </MDBCollapse>
 
                     <MDBContainer className="d-flex flex-row-reverse">
-                        <MDBDropdown>
-                            <MDBDropdownToggle tag='data-toggle'>
-                                <MDBNavbarLink href='#'>
-                                    <MDBIcon color='black-50' fas icon='user'></MDBIcon>
-                                </MDBNavbarLink>
-                            </MDBDropdownToggle>
-                            <MDBDropdownMenu>
-                                <MDBDropdownItem link>Profile</MDBDropdownItem>
-                                <MDBDropdownItem link>Settings</MDBDropdownItem>
-                                <MDBDropdownItem link>Sell products</MDBDropdownItem>
-                                <MDBDropdownItem divider />
-                                <MDBDropdownItem link onClick={localStorage.removeItem('jwt')} href="/">Log out</MDBDropdownItem>
-                            </MDBDropdownMenu>
-                        </MDBDropdown>
-                        <MDBDropdown>
-                            <MDBDropdownToggle tag='data-toggle'>
-                                <MDBNavbarLink href='#'>
-                                    <MDBIcon color='black-50' fas icon='bell'></MDBIcon>
-                                </MDBNavbarLink>
-                            </MDBDropdownToggle>
-                            <MDBDropdownMenu>
-                                <MDBDropdownItem link>Notification</MDBDropdownItem>
-                                <MDBDropdownItem link>Notification</MDBDropdownItem>
-                                <MDBDropdownItem link>Notification</MDBDropdownItem>
-                                <MDBDropdownItem link>Notification</MDBDropdownItem>
-                                <MDBDropdownItem link>Notification</MDBDropdownItem>
-                            </MDBDropdownMenu>
-                        </MDBDropdown>
-                        <MDBNavbarLink href='#' >
-                            <MDBIcon color='black-50' fas icon='shopping-cart'></MDBIcon>
+                        <MDBNavbarLink href="/login">
+                                    {/*<MDBIcon color='black-50' fas icon='user'></MDBIcon>*/}
+                                    Log in
                         </MDBNavbarLink>
                     </MDBContainer>
                 </MDBContainer>

@@ -1,6 +1,7 @@
 package edu.example.demospring.security;
 
 import edu.example.demospring.model.UserDTO;
+import edu.example.demospring.persitence.User;
 import edu.example.demospring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDTO user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         if(user ==null)
             throw new UsernameNotFoundException("User not found");
         var userDetails=new MyUserDetails(user);

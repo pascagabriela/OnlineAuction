@@ -48,7 +48,10 @@ class Login extends Component{
             },
             body: JSON.stringify(item),
         }).then((response)=>response.text()).then((result)=>{
-            console.log(result);
+            if(result!="Wrong password! Please try again!" && result!="This user doesn't exist!"){
+                localStorage.setItem('jwt', result);
+                window.location.href="/dashboard";
+            }
         });
     }
 

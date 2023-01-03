@@ -8,6 +8,7 @@ import Smartphones from "./Products/Electronics/Smartphones";
 import VideoGames from "./Products/Electronics/VideoGames";
 import Computer from "./Products/Electronics/Computer";
 import Cameras from "./Products/Electronics/Cameras";
+import UnloggedDashboard from "./Dashboard/UnloggedDashboard";
 
 class App extends Component {
     // state = {
@@ -24,7 +25,8 @@ class App extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route path='/' exact={true}><Login/></Route>
+                    <Route path='/' exact={true}><UnloggedDashboard/></Route>
+                    <Route path='/login' exact={true}><Login/></Route>
                     <Route path='/dashboard'><Dashboard/></Route>
                     <Route path='/register'><Register/></Route>
                     <Route path='/smartphones'><Smartphones/></Route>

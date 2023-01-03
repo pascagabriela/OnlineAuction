@@ -14,7 +14,7 @@ import {
     MDBTypography, MDBCardText
 } from 'mdb-react-ui-kit';
 
-import AppNavbar from '../AppNavbar';
+import AppNavbar from '../UnloggedNavbar';
 import Footer from '../Footer';
 
 function Dashboard() {
@@ -75,17 +75,17 @@ function Dashboard() {
             <br></br>
 
             <MDBRow>
-                    {product.filter(product => product.product_name.includes('l')).map((product) => {
-                            return <MDBCol md='3' key={product.id}>
-                                <MDBCard>
-                                    <MDBCardImage  src={product.image} position='top' width="100px" height="200px" object-fit="cover"/>
-                                    <MDBCardBody>
-                                        <MDBCardTitle >{product.product_name}</MDBCardTitle>
-                                        <MDBCardText >{product.price}$</MDBCardText>
-                                        <MDBBtn href='#' color="black 50">See more</MDBBtn>
-                                    </MDBCardBody>
-                                </MDBCard> <br></br></MDBCol>
-                    })}
+                {product.filter(product => product.product_name.includes('l')).map((product) => {
+                    return <MDBCol md='3' key={product.id}>
+                        <MDBCard>
+                            <MDBCardImage  src={product.image} position='top' width="100px" height="200px" object-fit="cover"/>
+                            <MDBCardBody>
+                                <MDBCardTitle >{product.product_name}</MDBCardTitle>
+                                <MDBCardText >{product.price}$</MDBCardText>
+                                <MDBBtn href='#' color="black 50">See more</MDBBtn>
+                            </MDBCardBody>
+                        </MDBCard> <br></br></MDBCol>
+                })}
             </MDBRow>
 
             <Footer></Footer>
