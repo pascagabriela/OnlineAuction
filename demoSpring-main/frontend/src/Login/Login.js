@@ -17,7 +17,6 @@ class Login extends Component{
         password: '',
     };
 
-
     constructor(props) {
         super(props);
         this.state = {
@@ -49,8 +48,11 @@ class Login extends Component{
             body: JSON.stringify(item),
         }).then((response)=>response.text()).then((result)=>{
             if(result!="Wrong password! Please try again!" && result!="This user doesn't exist!"){
+                // result = "Bearer " + result;
                 localStorage.setItem('jwt', result);
                 window.location.href="/dashboard";
+            }else{
+                alert("Wrong credentials!")
             }
         });
     }

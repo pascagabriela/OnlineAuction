@@ -8,12 +8,21 @@ import {
     MDBNavbarLink
 } from "mdb-react-ui-kit";
 
+import { useHistory } from 'react-router-dom';
+
 export default class AppNavbar extends Component {
     constructor(props) {
         super(props);
         this.state = {isOpen: false};
         this.toggle = this.toggle.bind(this);
     }
+
+
+    handleClick = () => {
+        localStorage.removeItem('jwt');
+        window.location.href="/";
+    }
+
 
     toggle() {
         this.setState({
@@ -207,7 +216,7 @@ export default class AppNavbar extends Component {
                                 <MDBDropdownItem link>Settings</MDBDropdownItem>
                                 <MDBDropdownItem link href="/sell">Sell products</MDBDropdownItem>
                                 <MDBDropdownItem divider />
-                                <MDBDropdownItem link onClick={localStorage.removeItem('jwt')} href="/">Log out</MDBDropdownItem>
+                                <MDBDropdownItem link onClick={this.handleClick}>Log out</MDBDropdownItem>
                             </MDBDropdownMenu>
                         </MDBDropdown>
                         <MDBDropdown>

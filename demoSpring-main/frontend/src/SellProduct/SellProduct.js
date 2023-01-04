@@ -19,7 +19,7 @@ class SellProduct extends Component{
         price: '',
         description: '',
         // image: '',
-        // type: '',
+        type: '',
     };
 
 
@@ -46,22 +46,21 @@ class SellProduct extends Component{
         event.preventDefault();
         const {item} = this.state;
 
-        if(item.password === item.confirmpassword){
             await fetch('authenticated/product_create', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authentification': 'Bearer token'
                 },
                 body: JSON.stringify(item),
             }).then((response)=>response.text()).then((result)=>{
-                    console.log(result);
-                    //window.location.href="/dashboard";
+                    if(result=="Product created"){
+                        alert("Product added successfully!");
+                    }else{
+                        alert("Something went wrong!");
+                    }
             });
-            //     console.log(item);
-            // });
-            // window.location.href = "/dashboard";
-        }
     }
 
     render() {
