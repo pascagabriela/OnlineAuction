@@ -8,7 +8,7 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBRow,
-    MDBCol, MDBContainer, MDBBtn, MDBTypography
+    MDBCol, MDBContainer, MDBBtn, MDBTypography, MDBInput
 } from 'mdb-react-ui-kit';
 import AppNavbar from "../AppNavbar";
 import Footer from "../Footer";
@@ -53,7 +53,14 @@ class ProductDetail extends Component{
                                                 <MDBCardText>
                                                     <small className='text-muted'>Price: </small> {product.price} $
                                                 </MDBCardText>
-                                                <MDBBtn>Add to cart</MDBBtn>
+                                                <br/>
+                                                <small className='text-muted'>Don't bid more money than you have.</small>
+                                                <br/>
+                                                <small className='text-muted'>If your price is the biggest, you win.</small>
+                                                <br/><br/>
+                                                <MDBInput label="Enter your price here"></MDBInput>
+                                                <br/>
+                                                <MDBBtn>Place a bid</MDBBtn>
                                             </MDBCardBody>
 
                     </MDBCol>
