@@ -1,6 +1,5 @@
 package edu.example.demospring.security;
 
-import edu.example.demospring.model.UserDTO;
 import edu.example.demospring.persitence.User;
 import edu.example.demospring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

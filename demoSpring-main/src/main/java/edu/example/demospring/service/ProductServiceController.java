@@ -2,7 +2,9 @@ package edu.example.demospring.service;
 
 import edu.example.demospring.dao.ProductServiceDAO;
 import edu.example.demospring.model.ProductDTO;
+import edu.example.demospring.persitence.Image;
 import edu.example.demospring.persitence.Product;
+import edu.example.demospring.repository.ImageRepository;
 import edu.example.demospring.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +23,14 @@ public class ProductServiceController {
 
     final ProductRepository productRepository;
 
+    final ImageRepository imageRepository;
+
     final ProductServiceDAO productServiceDAO;
 
 
-    public ProductServiceController(ProductRepository productRepository, ProductServiceDAO productServiceDAO) {
+    public ProductServiceController(ProductRepository productRepository, ImageRepository imageRepository, ProductServiceDAO productServiceDAO) {
         this.productRepository = productRepository;
+        this.imageRepository = imageRepository;
         this.productServiceDAO = productServiceDAO;
     }
 
@@ -44,6 +49,7 @@ public class ProductServiceController {
         product.setImage(productDTO.getImage());
         product.setType(productDTO.getType());
         productRepository.save(product);
+        System.out.println(productDTO.getImage());
         return new ResponseEntity<>("Product created", HttpStatus.OK);
     }
 
@@ -67,11 +73,24 @@ public class ProductServiceController {
         return new ResponseEntity<>("Product updated", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/authenticated/products/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/home/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") Long id) {
         ProductDTO remove = productsMap.remove(id);
         productRepository.deleteById(id);
         return new ResponseEntity<>(Optional.ofNullable(remove).map(p -> "Product deleted").orElse("Product not found"), HttpStatus.OK);
     }
 
+    @PostMapping("/images")
+    public void saveImage(@RequestParam("/authenticated/file") MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
+        byte[] fileData = file.getBytes();
+
+        Image image = new Image();
+        image.setName(fileName);
+        image.setType(fileType);
+        image.setData(fileData);
+
+        imageRepository.save(image);
+    }
 }

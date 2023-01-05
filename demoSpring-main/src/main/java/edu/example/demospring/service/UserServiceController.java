@@ -7,13 +7,10 @@ import edu.example.demospring.persitence.User;
 import edu.example.demospring.repository.UserRepository;
 import edu.example.demospring.security.JwtTokenUtil;
 import edu.example.demospring.security.MyUserDetails;
-import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -18,15 +18,14 @@ class SellProduct extends Component{
         product_name: '',
         price: '',
         description: '',
-        // image: '',
+        image: '',
         type: '',
     };
-
 
     constructor(props) {
         super(props);
         this.state = {
-            item: this.emptyItem
+            item: this.emptyItem,
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,7 +40,6 @@ class SellProduct extends Component{
         this.setState({item});
     }
 
-
     async handleSubmit(event) {
         event.preventDefault();
         const {item} = this.state;
@@ -51,7 +49,7 @@ class SellProduct extends Component{
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authentification': 'Bearer token'
+                    Authorization: "Bearer " + localStorage.getItem("jwt")
                 },
                 body: JSON.stringify(item),
             }).then((response)=>response.text()).then((result)=>{
@@ -70,42 +68,35 @@ class SellProduct extends Component{
             <MDBContainer fluid>
                 <AppNavbar></AppNavbar>
                 <Form onSubmit={this.handleSubmit}>
-                <MDBRow>
-                    <MDBCol className="col-3"></MDBCol>
-                    <MDBCol className="col-6">
-                        <MDBCard>
-                            <MDBCardImage position='top' alt='...' src='sell.jpg' />
+                <MDBRow className="mt-4">
+                    <MDBCol className="col-7">
+                        <MDBCardImage position='top' alt='...' height='500px' src='sell.jpg' />
+                    </MDBCol>
+                    <MDBCol className="col-5">
                             <MDBCardBody>
                                 <MDBCardTitle>Please fill the fields below</MDBCardTitle>
                             </MDBCardBody>
-                            <MDBListGroup flush>
-                                <MDBListGroupItem>
                                     <MDBInput value={item.product_name}
                                               onChange={this.handleChange} label='Product name'
                                               name='product_name' id='product_name' type='text' size='lg' />
-                                </MDBListGroupItem>
-                                <MDBListGroupItem>
+                        <br/>
                                     <MDBTextArea value={item.description}
                                                  onChange={this.handleChange}
                                                  label='Description' name='description' id='description' rows={4} />
-                                </MDBListGroupItem>
-                                <MDBListGroupItem>
+                        <br/>
                                     <MDBInput value={item.price}
                                               onChange={this.handleChange}
                                               label='Price' name='price' id='price' type='text' size='lg' />
-                                </MDBListGroupItem>
-                                <MDBListGroupItem className="d-flex">
+                        <br/>
                                     <label for="image" class="form-label">Product image</label>
                                     <input value={item.image} onChange={this.handleChange}
                                            class="form-control form-control-lg" name="image" id="image" type="file" />
-                                </MDBListGroupItem>
-                            </MDBListGroup>
                             <MDBCardBody className="d-flex">
                                 <MDBCol className="col-4">
-                                        <select className="form-lg-select"  alue={item.type}
+                                        <select className="form-lg-select text-muted"  value={item.type}
                                                 onChange={this.handleChange}
                                                 aria-label="Product type" name="type" id="type">
-                                            <option selected>Product type</option>
+                                            <option selected >Product type</option>
                                             <option value="11">Smartphones & accessories</option>
                                             <option value="12">Video games & consoles</option>
                                             <option value="13">Computers & tablets</option>
@@ -114,12 +105,10 @@ class SellProduct extends Component{
                                 </MDBCol>
                                 <MDBCol className="col-4"></MDBCol>
                                 <MDBCol className="col-4">
-                                    <MDBBtn type="submit" value="submit"  className="ms-lg-5">Add for sell</MDBBtn>
+                                    <MDBBtn type="submit" value="submit"  className="ms-3">Add for sell</MDBBtn>
                                 </MDBCol>
                             </MDBCardBody>
-                        </MDBCard>
                     </MDBCol>
-                    <MDBCol className="col-3"></MDBCol>
                 </MDBRow>
             </Form>
                 <Footer></Footer>

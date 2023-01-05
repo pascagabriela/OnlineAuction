@@ -8,7 +8,6 @@ import {
     MDBNavbarLink
 } from "mdb-react-ui-kit";
 
-import { useHistory } from 'react-router-dom';
 
 export default class AppNavbar extends Component {
     constructor(props) {
@@ -37,7 +36,7 @@ export default class AppNavbar extends Component {
                     <MDBCollapse className="collapse navbar-collapse">
                         <MDBNavbarBrand tag='a' className="navbar-brand mt-2 mt-lg-0" href="/dashboard">
                             <img
-                                src="logo.png"
+                                src="/logo.png"
                                 height="50"
                                 alt="Logo"/>
                         </MDBNavbarBrand>

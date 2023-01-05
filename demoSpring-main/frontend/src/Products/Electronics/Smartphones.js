@@ -35,7 +35,7 @@ const Smartphones = () => {
                                 <MDBCardBody>
                                     <MDBCardTitle >{product.product_name}</MDBCardTitle>
                                     <MDBCardText >{product.description}</MDBCardText>
-                                    <MDBBtn href='#' color="black 50">See more</MDBBtn>
+                                    <MDBBtn href={`/home/products/${product.id}`} color="black 50">See more</MDBBtn>
                                 </MDBCardBody>
                             </MDBCard> <br></br></MDBCol>
                         }
