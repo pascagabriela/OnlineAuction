@@ -34,7 +34,7 @@ const VideoGames = () => {
                                     <MDBCardImage src={product.image} position='top' width="100px" height="200px" object-fit="cover"/>
                                     <MDBCardBody>
                                         <MDBCardTitle>{product.product_name}</MDBCardTitle>
-                                        <MDBCardText>{product.description}</MDBCardText>
+                                        <MDBCardText >{product.price}$</MDBCardText>
                                         <MDBBtn href={`/home/products/${product.id}`} color="black 50">See more</MDBBtn>
                                     </MDBCardBody>
                                 </MDBCard> <br></br></MDBCol>

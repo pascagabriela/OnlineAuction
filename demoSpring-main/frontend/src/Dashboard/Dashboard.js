@@ -89,7 +89,7 @@ class  Dashboard extends Component{
                                               object-fit="cover"/>
                                 <MDBCardBody>
                                     <MDBCardTitle>{product.product_name}</MDBCardTitle>
-                                    <MDBCardText>{product.price}</MDBCardText>
+                                    <MDBCardText>{product.price}$</MDBCardText>
                                     <MDBBtn link href={`/home/products/${product.id}`} color="black 50">See more</MDBBtn>
                                 </MDBCardBody>
                             </MDBCard> <br></br></MDBCol>
