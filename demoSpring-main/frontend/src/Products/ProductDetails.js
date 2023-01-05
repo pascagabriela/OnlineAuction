@@ -60,23 +60,26 @@ class ProductDetail extends Component{
                 </MDBRow>
                 <br></br>
                 <MDBTypography tag='h4'>Similar products</MDBTypography>
-                <MDBTypography tag='h7' color="black-50">Recommended for you</MDBTypography>
+                <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
                 <br></br>
                 <br></br>
 
                 <MDBRow>
                     {products.map((products) => {
                         if (parseInt(products.type) == product.type) {
-                            return <MDBCol md='3'>
-                                <MDBCard key={products.id}>
-                                    <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
-                                                  object-fit="cover"/>
-                                    <MDBCardBody>
-                                        <MDBCardTitle>{products.product_name}</MDBCardTitle>
-                                        <MDBCardText>{products.price}$</MDBCardText>
-                                        <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
-                                    </MDBCardBody>
-                                </MDBCard> <br></br></MDBCol>
+                            if(products.id == product.id){
+                            }else{
+                                return <MDBCol md='3'>
+                                    <MDBCard key={products.id}>
+                                        <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
+                                                      object-fit="cover"/>
+                                        <MDBCardBody>
+                                            <MDBCardTitle>{products.product_name}</MDBCardTitle>
+                                            <MDBCardText>{products.price}$</MDBCardText>
+                                            <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
+                                        </MDBCardBody>
+                                    </MDBCard> <br></br></MDBCol>
+                            }
                         }
                     })}
                 </MDBRow>

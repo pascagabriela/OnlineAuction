@@ -17,7 +17,6 @@ import {
 
 import AppNavbar from '../AppNavbar';
 import Footer from '../Footer';
-import {Link} from "react-router-dom";
 
 class  Dashboard extends Component{
     constructor(props) {
@@ -56,7 +55,7 @@ class  Dashboard extends Component{
 
                 <br></br>
                 <MDBTypography tag='h4'>Daily Deals</MDBTypography>
-                <MDBTypography tag='h7' color="black-50">Recommended for you</MDBTypography>
+                <MDBTypography tag='h6' color="black-50">Recommended for you</MDBTypography>
                 <br></br>
                 <br></br>
 
@@ -70,7 +69,7 @@ class  Dashboard extends Component{
                                     <MDBCardBody>
                                         <MDBCardTitle>{product.product_name}</MDBCardTitle>
                                         <MDBCardText>{product.price}$</MDBCardText>
-                                        <MDBBtn color="black 50"><Link to={`/home/products/${product.id}`}>See more</Link></MDBBtn>
+                                        <MDBBtn  href={`/home/products/${product.id}`} color="black 50">See more</MDBBtn>
                                     </MDBCardBody>
                                 </MDBCard> <br></br></MDBCol>
                         }
@@ -90,7 +89,7 @@ class  Dashboard extends Component{
                                 <MDBCardBody>
                                     <MDBCardTitle>{product.product_name}</MDBCardTitle>
                                     <MDBCardText>{product.price}$</MDBCardText>
-                                    <MDBBtn link href={`/home/products/${product.id}`} color="black 50">See more</MDBBtn>
+                                    <MDBBtn href={`/home/products/${product.id}`} color="black 50">See more</MDBBtn>
                                 </MDBCardBody>
                             </MDBCard> <br></br></MDBCol>
                     })}
