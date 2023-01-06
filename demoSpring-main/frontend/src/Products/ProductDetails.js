@@ -17,6 +17,7 @@ import {Form} from "reactstrap";
 class ProductDetail extends Component{
     emptyItem = {
         bid:'',
+         //delay: 2000,
     };
 
     constructor(props) {
@@ -24,6 +25,7 @@ class ProductDetail extends Component{
         this.state = {
             product: [],
             products: [],
+            updates: [],
             item: this.emptyItem
         }
         this.handleChange = this.handleChange.bind(this);
@@ -40,6 +42,7 @@ class ProductDetail extends Component{
     }
 
     componentDidMount() {
+        //this.interval = setInterval(this.tick, this.state.delay);
         const { id } = this.props.match.params;
         fetch(`/home/products/${id}`)
             .then(response => response.json())
@@ -49,29 +52,58 @@ class ProductDetail extends Component{
             .then(products => this.setState({ products }));
     }
 
+
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     if(prevState.delay != this.state.delay){
+    //         clearInterval(this.interval);
+    //         this.interval = setInterval(this.tick, this.state.delay);
+    //     }
+    // }
+    //
+    // componentWillUnmount() {
+    //     clearInterval(this.interval);
+    // }
+    //
+    // tick = () => {
+    //     const {item} = this.state;
+    //     const { product } = this.state;
+    //     const { id } = this.props.match.params;
+    //     if(item.bid>product.price){
+    //         fetch(`/home/products/${id}`)
+    //             .then(response => response.json())
+    //             .then(product => this.setState({ product }));
+    //     }
+    // }
+
     async handleSubmit(event) {
         event.preventDefault();
         const {item} = this.state;
+        const { product } = this.state;
         const { id } = this.props.match.params;
-         //console.log("item: "+item);
-        // console.log("id: "+id);
 
-        await fetch(`/authenticated/products/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                // Authorization: "Bearer " + localStorage.getItem("jwt")
-            },
-            body: JSON.stringify({price: item.bid})
-        });
-        window.location.href=`/home/products/${id}`;
+        if(parseInt(item.bid)<=parseInt(product.price)){
+            alert("You must bid with a higher price!");
+        }else{
+            await fetch(`/authenticated/products/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    // Authorization: "Bearer " + localStorage.getItem("jwt")
+                },
+                body: JSON.stringify({price: item.bid})
+            });
+            //window.location.href=`/home/products/${id}`;
+        }
     }
 
     render() {
         const { product } = this.state;
         const { products } = this.state;
-        const{ item } = this.state;
+        const { item } = this.state;
+        // const { updates } = this.state;
+        // console.log("update: " +updates);
+
         return (
             <MDBContainer className="container-fluid">
                 <AppNavbar></AppNavbar>
