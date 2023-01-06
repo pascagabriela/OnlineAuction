@@ -61,11 +61,7 @@ public class ProductServiceController {
     @RequestMapping(value = "/authenticated/products/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Object> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO productDTO) {
         productRepository.findById(id).ifPresent(p -> {
-            p.setProduct_name(productDTO.getProduct_name());
             p.setPrice(productDTO.getPrice());
-            p.setDescription(productDTO.getDescription());
-            p.setImage(productDTO.getImage());
-            p.setType(productDTO.getType());
             productRepository.save(p);
         });
         productsMap.remove(id);

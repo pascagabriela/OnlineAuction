@@ -12,14 +12,31 @@ import {
 } from 'mdb-react-ui-kit';
 import AppNavbar from "../AppNavbar";
 import Footer from "../Footer";
+import {Form} from "reactstrap";
 
 class ProductDetail extends Component{
+    emptyItem = {
+        bid:'',
+    };
+
     constructor(props) {
         super(props);
         this.state = {
-             product: [],
-            products: []
+            product: [],
+            products: [],
+            item: this.emptyItem
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        let item = {...this.state.item};
+        item[name] = value;
+        this.setState({item});
     }
 
     componentDidMount() {
@@ -32,9 +49,29 @@ class ProductDetail extends Component{
             .then(products => this.setState({ products }));
     }
 
+    async handleSubmit(event) {
+        event.preventDefault();
+        const {item} = this.state;
+        const { id } = this.props.match.params;
+         //console.log("item: "+item);
+        // console.log("id: "+id);
+
+        await fetch(`/authenticated/products/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                // Authorization: "Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({price: item.bid})
+        });
+        window.location.href=`/home/products/${id}`;
+    }
+
     render() {
         const { product } = this.state;
         const { products } = this.state;
+        const{ item } = this.state;
         return (
             <MDBContainer className="container-fluid">
                 <AppNavbar></AppNavbar>
@@ -45,6 +82,7 @@ class ProductDetail extends Component{
                             object-fit="cover"/>
                     </MDBCol>
                     <MDBCol className="col-4 ms-lg-5">
+                        <Form onSubmit={this.handleSubmit}>
                                             <MDBCardBody>
                                                 <MDBCardTitle>{product.product_name}</MDBCardTitle>
                                                 <MDBCardText>
@@ -58,11 +96,12 @@ class ProductDetail extends Component{
                                                 <br/>
                                                 <small className='text-muted'>If your price is the biggest, you win.</small>
                                                 <br/><br/>
-                                                <MDBInput label="Enter your price here"></MDBInput>
+                                                <MDBInput value={item.bid}
+                                                          onChange={this.handleChange} name="bid" id="bid" label="Enter your price here"></MDBInput>
                                                 <br/>
-                                                <MDBBtn>Place a bid</MDBBtn>
+                                                <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
                                             </MDBCardBody>
-
+                        </Form>
                     </MDBCol>
                 </MDBRow>
                 <br></br>
