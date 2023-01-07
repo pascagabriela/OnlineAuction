@@ -40,7 +40,7 @@ class App extends Component {
                     <Route path='/sell'><SellProduct/></Route>
                     <Route path='/home/products/:id'><ProductDetails/></Route>
                     <Route path='/details'><ProductDetails/></Route>
-                    <Route path='/app'><App_Stomp/></Route>
+                    {/*<Route path='/app'><App_Stomp/></Route>*/}
                     <Route path='/message'><SocketMessage/></Route>
                     {/*<Route path='/products' exact={true}><ProductList/></Route>*/}
                     {/*<Route path='/products/:id'><ProductEdit/></Route>*/}
