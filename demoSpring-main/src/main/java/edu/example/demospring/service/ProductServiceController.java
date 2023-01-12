@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +37,8 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/home/products")
     public ResponseEntity<Object> getProducts() {
-        return new ResponseEntity<>(productRepository.findAll().stream().map(o -> new ProductDTO(o.getId(), o.getProduct_name(), o.getPrice(), o.getDescription(), o.getImage(), o.getType())).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(productRepository.findAll().stream().map(o -> new ProductDTO(o.getId(), o.getProduct_name(),
+                o.getPrice(), o.getDescription(), o.getImage(), o.getType(), o.getStarting())).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/authenticated/product_create", method = RequestMethod.POST)
@@ -48,14 +50,15 @@ public class ProductServiceController {
         product.setDescription(productDTO.getDescription());
         product.setImage(productDTO.getImage());
         product.setType(productDTO.getType());
+        product.setStarting(System.currentTimeMillis());
         productRepository.save(product);
-        System.out.println(productDTO.getImage());
         return new ResponseEntity<>("Product created", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/home/products/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProduct(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(productRepository.findById(id).map(p -> new ProductDTO(p.getId(), p.getProduct_name(), p.getPrice(), p.getDescription(), p.getImage(), p.getType())).orElse(null), HttpStatus.OK);
+        return new ResponseEntity<>(productRepository.findById(id).map(p -> new ProductDTO(p.getId(), p.getProduct_name(), p.getPrice(),
+                p.getDescription(), p.getImage(), p.getType(), p.getStarting())).orElse(null), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/authenticated/products/{id}", method = RequestMethod.PUT)

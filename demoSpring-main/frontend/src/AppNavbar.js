@@ -19,6 +19,7 @@ export default class AppNavbar extends Component {
 
     handleClick = () => {
         localStorage.removeItem('jwt');
+        localStorage.removeItem('email');
         window.location.href="/";
     }
 

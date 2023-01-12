@@ -17,7 +17,7 @@ public class ProductServiceDAO {
         this.em = em;
     }
 
-    public List<Product> findUsers() {
+    public List<Product> findProducts() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         Root<Product> from = cq.from(Product.class);

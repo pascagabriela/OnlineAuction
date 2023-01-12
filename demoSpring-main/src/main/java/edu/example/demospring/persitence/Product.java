@@ -2,24 +2,27 @@ package edu.example.demospring.persitence;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
-    private long id;
+    private long id,starting;
     private String product_name, price, description, image;
 
     private int type;
     public Product() {
     }
 
-    public Product(Long id, String product_name, String price, String description, String image, int type) {
+    public Product(Long id, String product_name, String price, String description, String image, int type, long starting) {
         this.id = id;
         this.product_name = product_name;
         this.price = price;
         this.description = description;
         this.image = image;
         this.type = type;
+        this.starting = starting;
     }
 
     @Id
@@ -67,4 +70,8 @@ public class Product implements Serializable {
     public int getType() {return type;}
 
     public void setType(int type) {this.type = type;}
+
+    public long getStarting() {return starting;}
+
+    public void setStarting(long starting) {this.starting = starting;}
 }

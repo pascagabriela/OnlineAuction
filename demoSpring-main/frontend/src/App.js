@@ -11,8 +11,8 @@ import Cameras from "./Products/Electronics/Cameras";
 import UnloggedDashboard from "./Dashboard/UnloggedDashboard";
 import SellProduct from "./SellProduct/SellProduct";
 import ProductDetails from "./Products/ProductDetails";
-import App_Stomp from "./App_Stomp";
 import SocketMessage from "./SocketMessage";
+import Kafka from "./SellProduct/Kafka";
 
 class App extends Component {
     // state = {
@@ -40,10 +40,8 @@ class App extends Component {
                     <Route path='/sell'><SellProduct/></Route>
                     <Route path='/home/products/:id'><ProductDetails/></Route>
                     <Route path='/details'><ProductDetails/></Route>
-                    {/*<Route path='/app'><App_Stomp/></Route>*/}
                     <Route path='/message'><SocketMessage/></Route>
-                    {/*<Route path='/products' exact={true}><ProductList/></Route>*/}
-                    {/*<Route path='/products/:id'><ProductEdit/></Route>*/}
+                    <Route path='/kafkaMessage'><Kafka/></Route>
                 </Switch>
             </Router>
         )

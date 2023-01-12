@@ -12,21 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class WebSocketTextController {
-
     @Autowired
     SimpMessagingTemplate template;
-
-//    @PostMapping("/send")
-//    public ResponseEntity<Void> sendMessage(@RequestBody TextMessageDTO textMessageDTO) {
-//        template.convertAndSend("/topic/message", textMessageDTO);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody ProductDTO productDTO) {
         TextMessageDTO textMessageDTO = new TextMessageDTO();
         textMessageDTO.setMessage(productDTO.getPrice());
-        template.convertAndSend("/topic/message", textMessageDTO);
+        long productId = productDTO.getId();
+        String destination = "/topic/" + productId;
+        template.convertAndSend(destination, textMessageDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -37,4 +32,5 @@ public class WebSocketTextController {
         System.out.println(textMessageDTO);
         return textMessageDTO;
     }
+
 }

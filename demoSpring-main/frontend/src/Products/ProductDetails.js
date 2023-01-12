@@ -22,13 +22,23 @@ class ProductDetail extends Component{
         bid:'',
     };
 
+    dateStart = {
+        product_name: '',
+        price: '',
+        description: '',
+        image: '',
+        type: '',
+        starting: '',
+        // getEmail: '',
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             product: [],
             products: [],
-            updates: [],
             messages: '',
+            startBidding: this.dateStart,
             item: this.emptyItem
         }
         this.handleChange = this.handleChange.bind(this);
@@ -48,7 +58,10 @@ class ProductDetail extends Component{
         const { id } = this.props.match.params;
         fetch(`/home/products/${id}`)
             .then(response => response.json())
-            .then(product => this.setState({ product }));
+            .then(date => this.setState({ product:date }));
+        fetch(`/home/products/${id}`)
+            .then(response => response.json())
+            .then(date => this.setState({ startBidding:date }));
         fetch('/home/products')
             .then(response => response.json())
             .then(products => this.setState({ products }));
@@ -57,9 +70,10 @@ class ProductDetail extends Component{
 
         let onConnected = () => {
             console.log("Connected!!")
-            client.subscribe('/topic/message', function (msg) {
+            client.subscribe(`/topic/${this.props.match.params.id}`, function (msg) {
+                console.log(msg);
                 if (msg.body) {
-                    var jsonBody = JSON.parse(msg.body);
+                    let jsonBody = JSON.parse(msg.body);
                     if (jsonBody.message) {
                         currentComponent.setState({ messages: jsonBody.message })
                     }
@@ -87,7 +101,6 @@ class ProductDetail extends Component{
         event.preventDefault();
         const {item} = this.state;
         const { product } = this.state;
-        const { updates } = this.state;
         const { id } = this.props.match.params;
 
         if(parseInt(item.bid)<parseInt(product.price)){
@@ -104,15 +117,17 @@ class ProductDetail extends Component{
             });
         }
 
-        fetch('http://localhost:8080/send', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({price:item.bid}),
-        }).then((response)=>response.text()).then((result)=>{
-        });
+        this.state.messages = item.bid;
+        if(parseInt(item.bid)>parseInt(product.price)){
+            fetch('http://localhost:8080/send', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({id:id,price:item.bid}),
+            }).then((response)=>response.text());
+        }
 
     }
 
@@ -120,128 +135,278 @@ class ProductDetail extends Component{
         const { product } = this.state;
         const { products } = this.state;
         const { item } = this.state;
+        console.log("this.state.message: "+this.state.messages);
+        //432000000
+        const savedEndDate = this.state.startBidding.starting+432000000;
+        const parsedSavedDate = new Date(parseInt(savedEndDate, 10));
+        const toStringSavedDate = parsedSavedDate.toString('MM/dd/yy HH:mm:ss');
+
+        const currentDate = Date.now();
+        const parsedCurrentDate = new Date(parseInt(currentDate, 10));
+        const toStringCurrentDate = parsedCurrentDate.toString('MM/dd/yy HH:mm:ss');
+
         if(this.state.messages){
-            return (
-                <MDBContainer className="container-fluid">
-                    <AppNavbar></AppNavbar>
-                    <MDBRow className="mt-4">
-                        <MDBCol className="col-7">
-                            <MDBCardImage
-                                src={`/${product.image}`} position='top' width="500px" height="500px"
-                                object-fit="cover"/>
-                        </MDBCol>
-                        <MDBCol className="col-4 ms-lg-5">
-                            <Form onSubmit={this.handleSubmit}>
-                                <MDBCardBody>
-                                    <MDBCardTitle>{product.product_name}</MDBCardTitle>
-                                    <MDBCardText>
-                                        <small className='text-muted'>Description: </small> {product.description}
-                                    </MDBCardText>
-                                    <MDBCardText>
-                                        <small className='text-muted'>Price: </small> {this.state.messages} $
-                                    </MDBCardText>
-                                    <br/>
-                                    <small className='text-muted'>Don't bid more money than you have.</small>
-                                    <br/>
-                                    <small className='text-muted'>If your price is the biggest, you win.</small>
-                                    <br/><br/>
-                                    <MDBInput value={item.bid}
-                                              onChange={this.handleChange} name="bid" id="bid" label="Enter your price here"></MDBInput>
-                                    <br/>
-                                    <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
-                                </MDBCardBody>
-                            </Form>
-                        </MDBCol>
-                    </MDBRow>
-                    <br></br>
-                    <MDBTypography tag='h4'>Similar products</MDBTypography>
-                    <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
-                    <br></br>
-                    <br></br>
+            if(currentDate>savedEndDate){
+                return (
+                    <MDBContainer className="container-fluid">
+                        <AppNavbar></AppNavbar>
+                        <MDBRow className="mt-4">
+                            <MDBCol className="col-7">
+                                <MDBCardImage
+                                    src={`/${product.image}`} position='top' width="500px" height="500px"
+                                    object-fit="cover"/>
+                            </MDBCol>
+                            <MDBCol className="col-4 ms-lg-5">
+                                <Form onSubmit={this.handleSubmit}>
+                                    <MDBCardBody>
+                                        <MDBCardTitle>{product.product_name}</MDBCardTitle>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Description: </small> {product.description}
+                                        </MDBCardText>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Price: </small> {this.state.messages} $
+                                        </MDBCardText>
+                                        <br/>
+                                        <small className='text-muted'>Don't bid more money than you have.</small>
+                                        <br/>
+                                        <small className='text-muted'>If your price is the biggest, you win.</small>
+                                        <br/><br/>
+                                        <small className='text-muted'>Ended: {parsedSavedDate.toDateString()} {parsedSavedDate.getHours()}:{parsedSavedDate.getMinutes()}</small>
+                                        <br/>
+                                        <MDBInput value={item.bid}
+                                                  onChange={this.handleChange} name="bid" id="bid" label="Enter your price here" disabled></MDBInput>
+                                        <br/>
+                                        <small className='text-muted'><i>The bidding time expired.</i></small>
+                                        <br/>
+                                        <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
+                                    </MDBCardBody>
+                                </Form>
+                            </MDBCol>
+                        </MDBRow>
+                        <br></br>
+                        <MDBTypography tag='h4'>Similar products</MDBTypography>
+                        <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
+                        <br></br>
+                        <br></br>
 
-                    <MDBRow>
-                        {products.map((products) => {
-                            if (parseInt(products.type) == product.type) {
-                                if(products.id == product.id){
-                                }else{
-                                    return <MDBCol md='3'>
-                                        <MDBCard key={products.id}>
-                                            <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
-                                                          object-fit="cover"/>
-                                            <MDBCardBody>
-                                                <MDBCardTitle>{products.product_name}</MDBCardTitle>
-                                                <MDBCardText>{products.price}$</MDBCardText>
-                                                <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
-                                            </MDBCardBody>
-                                        </MDBCard> <br></br></MDBCol>
+                        <MDBRow>
+                            {products.map((products) => {
+                                if (parseInt(products.type) === product.type) {
+                                    if(products.id === product.id){
+                                    }else{
+                                        return <MDBCol md='3'>
+                                            <MDBCard key={products.id}>
+                                                <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
+                                                              object-fit="cover"/>
+                                                <MDBCardBody>
+                                                    <MDBCardTitle>{products.product_name}</MDBCardTitle>
+                                                    <MDBCardText>{products.price}$</MDBCardText>
+                                                    <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
+                                                </MDBCardBody>
+                                            </MDBCard> <br></br></MDBCol>
+                                    }
                                 }
-                            }
-                        })}
-                    </MDBRow>
-                    <Footer></Footer>
-                </MDBContainer>
-            )
+                            })}
+                        </MDBRow>
+                        <Footer></Footer>
+                    </MDBContainer>
+                )
+            }else{
+                return (
+                    <MDBContainer className="container-fluid">
+                        <AppNavbar></AppNavbar>
+                        <MDBRow className="mt-4">
+                            <MDBCol className="col-7">
+                                <MDBCardImage
+                                    src={`/${product.image}`} position='top' width="500px" height="500px"
+                                    object-fit="cover"/>
+                            </MDBCol>
+                            <MDBCol className="col-4 ms-lg-5">
+                                <Form onSubmit={this.handleSubmit}>
+                                    <MDBCardBody>
+                                        <MDBCardTitle>{product.product_name}</MDBCardTitle>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Description: </small> {product.description}
+                                        </MDBCardText>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Price: </small> {this.state.messages} $
+                                        </MDBCardText>
+                                        <br/>
+                                        <small className='text-muted'>Don't bid more money than you have.</small>
+                                        <br/>
+                                        <small className='text-muted'>If your price is the biggest, you win.</small>
+                                        <br/><br/>
+                                        <small className='text-muted'>Ends: {parsedSavedDate.toDateString()} {parsedSavedDate.getHours()}:{parsedSavedDate.getMinutes()}</small>
+                                        <br/>
+                                        <MDBInput value={item.bid}
+                                                  onChange={this.handleChange} name="bid" id="bid" label="Enter your price here"></MDBInput>
+                                        <br/>
+                                        <br/>
+                                        <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
+                                    </MDBCardBody>
+                                </Form>
+                            </MDBCol>
+                        </MDBRow>
+                        <br></br>
+                        <MDBTypography tag='h4'>Similar products</MDBTypography>
+                        <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
+                        <br></br>
+                        <br></br>
+
+                        <MDBRow>
+                            {products.map((products) => {
+                                if (parseInt(products.type) === product.type) {
+                                    if(products.id === product.id){
+                                    }else{
+                                        return <MDBCol md='3'>
+                                            <MDBCard key={products.id}>
+                                                <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
+                                                              object-fit="cover"/>
+                                                <MDBCardBody>
+                                                    <MDBCardTitle>{products.product_name}</MDBCardTitle>
+                                                    <MDBCardText>{products.price}$</MDBCardText>
+                                                    <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
+                                                </MDBCardBody>
+                                            </MDBCard> <br></br></MDBCol>
+                                    }
+                                }
+                            })}
+                        </MDBRow>
+                        <Footer></Footer>
+                    </MDBContainer>
+                )
+            }
         }else{
-            return (
-                <MDBContainer className="container-fluid">
-                    <AppNavbar></AppNavbar>
-                    <MDBRow className="mt-4">
-                        <MDBCol className="col-7">
-                            <MDBCardImage
-                                src={`/${product.image}`} position='top' width="500px" height="500px"
-                                object-fit="cover"/>
-                        </MDBCol>
-                        <MDBCol className="col-4 ms-lg-5">
-                            <Form onSubmit={this.handleSubmit}>
-                                <MDBCardBody>
-                                    <MDBCardTitle>{product.product_name}</MDBCardTitle>
-                                    <MDBCardText>
-                                        <small className='text-muted'>Description: </small> {product.description}
-                                    </MDBCardText>
-                                    <MDBCardText>
-                                        <small className='text-muted'>Price: </small> {product.price} $
-                                    </MDBCardText>
-                                    <br/>
-                                    <small className='text-muted'>Don't bid more money than you have.</small>
-                                    <br/>
-                                    <small className='text-muted'>If your price is the biggest, you win.</small>
-                                    <br/><br/>
-                                    <MDBInput value={item.bid}
-                                              onChange={this.handleChange} name="bid" id="bid" label="Enter your price here"></MDBInput>
-                                    <br/>
-                                    <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
-                                </MDBCardBody>
-                            </Form>
-                        </MDBCol>
-                    </MDBRow>
-                    <br></br>
-                    <MDBTypography tag='h4'>Similar products</MDBTypography>
-                    <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
-                    <br></br>
-                    <br></br>
+            if(currentDate>savedEndDate){
+                return (
+                    <MDBContainer className="container-fluid">
+                        <AppNavbar></AppNavbar>
+                        <MDBRow className="mt-4">
+                            <MDBCol className="col-7">
+                                <MDBCardImage
+                                    src={`/${product.image}`} position='top' width="500px" height="500px"
+                                    object-fit="cover"/>
+                            </MDBCol>
+                            <MDBCol className="col-4 ms-lg-5">
+                                <Form onSubmit={this.handleSubmit}>
+                                    <MDBCardBody>
+                                        <MDBCardTitle>{product.product_name}</MDBCardTitle>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Description: </small> {product.description}
+                                        </MDBCardText>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Price: </small> {product.price} $
+                                        </MDBCardText>
+                                        <br/>
+                                        <small className='text-muted'>Don't bid more money than you have.</small>
+                                        <br/>
+                                        <small className='text-muted'>If your price is the biggest, you win.</small>
+                                        <br/><br/>
+                                        <small className='text-muted'>Ended: {parsedSavedDate.toDateString()} {parsedSavedDate.getHours()}:{parsedSavedDate.getMinutes()}</small>
+                                        <br/>
+                                        <MDBInput value={item.bid}
+                                                  onChange={this.handleChange} name="bid" id="bid" label="Enter your price here" disabled></MDBInput>
+                                        <br/>
+                                        <small className='text-muted'><i>The bidding time expired.</i></small>
+                                        <br/>
+                                        <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
+                                    </MDBCardBody>
+                                </Form>
+                            </MDBCol>
+                        </MDBRow>
+                        <br></br>
+                        <MDBTypography tag='h4'>Similar products</MDBTypography>
+                        <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
+                        <br></br>
+                        <br></br>
 
-                    <MDBRow>
-                        {products.map((products) => {
-                            if (parseInt(products.type) == product.type) {
-                                if(products.id == product.id){
-                                }else{
-                                    return <MDBCol md='3'>
-                                        <MDBCard key={products.id}>
-                                            <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
-                                                          object-fit="cover"/>
-                                            <MDBCardBody>
-                                                <MDBCardTitle>{products.product_name}</MDBCardTitle>
-                                                <MDBCardText>{products.price}$</MDBCardText>
-                                                <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
-                                            </MDBCardBody>
-                                        </MDBCard> <br></br></MDBCol>
+                        <MDBRow>
+                            {products.map((products) => {
+                                if (parseInt(products.type) === product.type) {
+                                    if(products.id === product.id){
+                                    }else{
+                                        return <MDBCol md='3'>
+                                            <MDBCard key={products.id}>
+                                                <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
+                                                              object-fit="cover"/>
+                                                <MDBCardBody>
+                                                    <MDBCardTitle>{products.product_name}</MDBCardTitle>
+                                                    <MDBCardText>{products.price}$</MDBCardText>
+                                                    <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
+                                                </MDBCardBody>
+                                            </MDBCard> <br></br></MDBCol>
+                                    }
                                 }
-                            }
-                        })}
-                    </MDBRow>
-                    <Footer></Footer>
-                </MDBContainer>
-            )
+                            })}
+                        </MDBRow>
+                        <Footer></Footer>
+                    </MDBContainer>
+                )
+            }else{
+                return (
+                    <MDBContainer className="container-fluid">
+                        <AppNavbar></AppNavbar>
+                        <MDBRow className="mt-4">
+                            <MDBCol className="col-7">
+                                <MDBCardImage
+                                    src={`/${product.image}`} position='top' width="500px" height="500px"
+                                    object-fit="cover"/>
+                            </MDBCol>
+                            <MDBCol className="col-4 ms-lg-5">
+                                <Form onSubmit={this.handleSubmit}>
+                                    <MDBCardBody>
+                                        <MDBCardTitle>{product.product_name}</MDBCardTitle>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Description: </small> {product.description}
+                                        </MDBCardText>
+                                        <MDBCardText>
+                                            <small className='text-muted'>Price: </small> {product.price} $
+                                        </MDBCardText>
+                                        <br/>
+                                        <small className='text-muted'>Don't bid more money than you have.</small>
+                                        <br/>
+                                        <small className='text-muted'>If your price is the biggest, you win.</small>
+                                        <br/><br/>
+                                        <small className='text-muted'>Ends: {parsedSavedDate.toDateString()} {parsedSavedDate.getHours()}:{parsedSavedDate.getMinutes()}</small>
+                                        <br/>
+                                        <MDBInput value={item.bid}
+                                                  onChange={this.handleChange} name="bid" id="bid" label="Enter your price here"></MDBInput>
+                                        <br/>
+                                        <br/>
+                                        <MDBBtn type="submit" value="submit" >Place a bid</MDBBtn>
+                                    </MDBCardBody>
+                                </Form>
+                            </MDBCol>
+                        </MDBRow>
+                        <br></br>
+                        <MDBTypography tag='h4'>Similar products</MDBTypography>
+                        <MDBTypography tag='h5' color="black-50">Recommended for you</MDBTypography>
+                        <br></br>
+                        <br></br>
+
+                        <MDBRow>
+                            {products.map((products) => {
+                                if (parseInt(products.type) === product.type) {
+                                    if(products.id === product.id){
+                                    }else{
+                                        return <MDBCol md='3'>
+                                            <MDBCard key={products.id}>
+                                                <MDBCardImage src={`/${products.image}`} position='top' width="100px" height="200px"
+                                                              object-fit="cover"/>
+                                                <MDBCardBody>
+                                                    <MDBCardTitle>{products.product_name}</MDBCardTitle>
+                                                    <MDBCardText>{products.price}$</MDBCardText>
+                                                    <MDBBtn href={`/home/products/${products.id}`} color="black 50">See more</MDBBtn>
+                                                </MDBCardBody>
+                                            </MDBCard> <br></br></MDBCol>
+                                    }
+                                }
+                            })}
+                        </MDBRow>
+                        <Footer></Footer>
+                    </MDBContainer>
+                )
+            }
         }
     }
 }

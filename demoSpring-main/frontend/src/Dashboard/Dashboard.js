@@ -30,6 +30,12 @@ class  Dashboard extends Component{
             .then(data => this.setState({products: data}));
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        fetch('/home/products')
+            .then(response => response.json())
+            .then(data => this.setState({products: data}));
+    }
+
     render() {
         const {products} = this.state;
         return (

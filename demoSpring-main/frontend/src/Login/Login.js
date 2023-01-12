@@ -50,6 +50,7 @@ class Login extends Component{
             if(result!="Wrong password! Please try again!" && result!="This user doesn't exist!"){
                 // result = "Bearer " + result;
                 localStorage.setItem('jwt', result);
+                localStorage.setItem('email', item.email);
                 window.location.href="/dashboard";
             }else{
                 alert("Wrong credentials!")
