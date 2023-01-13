@@ -68,7 +68,7 @@ class Profile extends Component{
         return (
             <MDBContainer fluid>
                 <Form onSubmit={this.handleSubmit}>
-                    <div className="p-5 bg-image" style={{backgroundImage: 'url(https://fontawesome.com/social/user?f=classic&s=&v=5)', height: '350px'}}></div>
+                    <div className="p-5 bg-image" style={{backgroundImage: 'url(https://t4.ftcdn.net/jpg/03/85/01/83/360_F_385018368_fIwyq4ablFL2z6RYnOL9c5N4uIN27Kcc.jpg)', height: '350px'}}></div>
                 {users.map((user) => {
                     if(localStorage.getItem("email")==user.email){
                         return <MDBCard className='mx-5 mb-5 p-5 shadow-5' style={{

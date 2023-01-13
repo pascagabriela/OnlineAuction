@@ -95,6 +95,20 @@ class ProductDetail extends Component{
         });
 
         client.activate();
+
+        const parsedSavedDate = new Date(parseInt(this.state.startBidding.starting+60000, 10));
+        const parsedCurrentDate = new Date(parseInt(Date.now(), 10));
+
+        if(parsedCurrentDate>parsedSavedDate){
+            fetch('http://localhost:8080/send_kafkaMessage', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({product_name:"The bidding expired!"}),
+            }).then((response)=>response.text());
+        }
     }
 
     async handleSubmit(event) {
@@ -103,7 +117,7 @@ class ProductDetail extends Component{
         const { product } = this.state;
         const { id } = this.props.match.params;
 
-        if(parseInt(item.bid)<parseInt(product.price)){
+        if(parseInt(item.bid)<=parseInt(product.price)){
             alert("You must bid with a higher price!");
         }else{
             await fetch(`/authenticated/products/${id}`, {
@@ -117,7 +131,6 @@ class ProductDetail extends Component{
             });
         }
 
-        this.state.messages = item.bid;
         if(parseInt(item.bid)>parseInt(product.price)){
             fetch('http://localhost:8080/send', {
                 method: 'POST',
@@ -136,17 +149,12 @@ class ProductDetail extends Component{
         const { products } = this.state;
         const { item } = this.state;
         console.log("this.state.message: "+this.state.messages);
-        //432000000
-        const savedEndDate = this.state.startBidding.starting+432000000;
-        const parsedSavedDate = new Date(parseInt(savedEndDate, 10));
-        const toStringSavedDate = parsedSavedDate.toString('MM/dd/yy HH:mm:ss');
 
-        const currentDate = Date.now();
-        const parsedCurrentDate = new Date(parseInt(currentDate, 10));
-        const toStringCurrentDate = parsedCurrentDate.toString('MM/dd/yy HH:mm:ss');
+        const parsedSavedDate = new Date(parseInt(this.state.startBidding.starting+60000, 10));
+        const parsedCurrentDate = new Date(parseInt(Date.now(), 10));
 
         if(this.state.messages){
-            if(currentDate>savedEndDate){
+            if(parsedCurrentDate>parsedSavedDate){
                 return (
                     <MDBContainer className="container-fluid">
                         <AppNavbar></AppNavbar>
@@ -277,7 +285,7 @@ class ProductDetail extends Component{
                 )
             }
         }else{
-            if(currentDate>savedEndDate){
+            if(parsedCurrentDate>parsedSavedDate){
                 return (
                     <MDBContainer className="container-fluid">
                         <AppNavbar></AppNavbar>

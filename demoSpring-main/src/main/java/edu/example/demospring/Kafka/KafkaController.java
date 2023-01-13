@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 @RestController
 public class KafkaController {
 
-    private static final String TOPIC_NAME = "BiddingEXPIRED";
+    private static final String TOPIC_NAME = "BiddingTimeUpdate";
     private static final Logger log = Logger.getLogger(KafkaController.class.getCanonicalName());
 
     private KafkaTemplate<String, ProductDTO> kafkaTemplate;
