@@ -61,10 +61,7 @@ public class UserServiceController {
     public ResponseEntity<Object> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
         userRepository.findById(id).ifPresent(p -> {
             p.setFirst_name(userDTO.getFirst_name());
-            p.setLast_name(userDTO.getLast_name());
-            p.setEmail(userDTO.getEmail());
             p.setPhone(userDTO.getPhone());
-            p.setPassword(userDTO.getPassword());
             userRepository.save(p);
         });
         usersMap.remove(id);

@@ -212,7 +212,7 @@ export default class AppNavbar extends Component {
                                 </MDBNavbarLink>
                             </MDBDropdownToggle>
                             <MDBDropdownMenu>
-                                <MDBDropdownItem link>Profile</MDBDropdownItem>
+                                <MDBDropdownItem link href='/profile'>Profile</MDBDropdownItem>
                                 <MDBDropdownItem link>Settings</MDBDropdownItem>
                                 <MDBDropdownItem link href="/sell">Sell products</MDBDropdownItem>
                                 <MDBDropdownItem divider />

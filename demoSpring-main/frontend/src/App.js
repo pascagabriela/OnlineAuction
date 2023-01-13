@@ -13,6 +13,7 @@ import SellProduct from "./SellProduct/SellProduct";
 import ProductDetails from "./Products/ProductDetails";
 import SocketMessage from "./SocketMessage";
 import Kafka from "./SellProduct/Kafka";
+import Profile from "./Login/Profile";
 
 class App extends Component {
     // state = {
@@ -42,6 +43,7 @@ class App extends Component {
                     <Route path='/details'><ProductDetails/></Route>
                     <Route path='/message'><SocketMessage/></Route>
                     <Route path='/kafkaMessage'><Kafka/></Route>
+                    <Route path='/profile'><Profile/></Route>
                 </Switch>
             </Router>
         )

@@ -21,26 +21,33 @@ import Footer from '../Footer';
 class  Dashboard extends Component{
     constructor(props) {
         super(props);
-        this.state = {products: []};
+        this.state = {
+            products: [],
+            users: [],
+        };
     }
 
     componentDidMount() {
         fetch('/home/products')
             .then(response => response.json())
             .then(data => this.setState({products: data}));
+        fetch('/home/users')
+            .then(response => response.json())
+            .then(data => this.setState({users: data}));
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        fetch('/home/products')
-            .then(response => response.json())
-            .then(data => this.setState({products: data}));
-    }
 
     render() {
         const {products} = this.state;
+        const {users} = this.state;
         return (
             <MDBContainer className="container-fluid">
                 <AppNavbar></AppNavbar>
+                {users.map((user) => {
+                    if(localStorage.getItem('email')==user.email){
+                        localStorage.setItem('userId',user.id)
+                    }
+                })}
                 <MDBCarousel showControls delay={3000}>
                     <MDBCarouselItem
                         className='w-100 d-block'
