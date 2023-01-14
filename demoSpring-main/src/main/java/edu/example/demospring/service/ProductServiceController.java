@@ -1,5 +1,6 @@
 package edu.example.demospring.service;
 
+import edu.example.demospring.dao.ImageServiceDAO;
 import edu.example.demospring.dao.ProductServiceDAO;
 import edu.example.demospring.model.ProductDTO;
 import edu.example.demospring.persitence.Image;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,12 +27,14 @@ public class ProductServiceController {
     final ImageRepository imageRepository;
 
     final ProductServiceDAO productServiceDAO;
+    final ImageServiceDAO imageServiceDAO;
 
 
-    public ProductServiceController(ProductRepository productRepository, ImageRepository imageRepository, ProductServiceDAO productServiceDAO) {
+    public ProductServiceController(ProductRepository productRepository, ImageRepository imageRepository, ProductServiceDAO productServiceDAO, ImageServiceDAO imageServiceDAO) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.productServiceDAO = productServiceDAO;
+        this.imageServiceDAO = imageServiceDAO;
     }
 
     @RequestMapping(value = "/home/products")

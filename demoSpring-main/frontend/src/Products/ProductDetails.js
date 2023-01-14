@@ -8,7 +8,7 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBRow,
-    MDBCol, MDBContainer, MDBBtn, MDBTypography, MDBInput
+    MDBCol, MDBContainer, MDBBtn, MDBTypography, MDBInput, MDBTextArea
 } from 'mdb-react-ui-kit';
 import AppNavbar from "../AppNavbar";
 import Footer from "../Footer";
@@ -29,7 +29,6 @@ class ProductDetail extends Component{
         image: '',
         type: '',
         starting: '',
-        // getEmail: '',
     }
 
     constructor(props) {
@@ -39,6 +38,7 @@ class ProductDetail extends Component{
             products: [],
             messages: '',
             startBidding: this.dateStart,
+            biddings: [],
             item: this.emptyItem
         }
         this.handleChange = this.handleChange.bind(this);
@@ -65,6 +65,9 @@ class ProductDetail extends Component{
         fetch('/home/products')
             .then(response => response.json())
             .then(products => this.setState({ products }));
+        fetch(`/home/biddings`)
+            .then(response => response.json())
+            .then(data => this.setState({ biddings:data }));
 
         let currentComponent = this;
 
@@ -96,7 +99,7 @@ class ProductDetail extends Component{
 
         client.activate();
 
-        const parsedSavedDate = new Date(parseInt(this.state.startBidding.starting+60000, 10));
+        const parsedSavedDate = new Date(parseInt(this.state.startBidding.starting+432000000, 10));
         const parsedCurrentDate = new Date(parseInt(Date.now(), 10));
 
         if(parsedCurrentDate>parsedSavedDate){
@@ -125,9 +128,18 @@ class ProductDetail extends Component{
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    // Authorization: "Bearer " + localStorage.getItem("jwt")
+                     Authorization: "Bearer " + localStorage.getItem("jwt")
                 },
                 body: JSON.stringify({price: item.bid})
+            });
+
+            await fetch(`/home/bidding_create`,{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email:localStorage.getItem("email"), price: item.bid, product_id:id})
             });
         }
 
@@ -148,9 +160,10 @@ class ProductDetail extends Component{
         const { product } = this.state;
         const { products } = this.state;
         const { item } = this.state;
-        console.log("this.state.message: "+this.state.messages);
+        const {biddings} = this.state;
+        const { id } = this.props.match.params;
 
-        const parsedSavedDate = new Date(parseInt(this.state.startBidding.starting+60000, 10));
+        const parsedSavedDate = new Date(parseInt(this.state.startBidding.starting+432000000, 10));
         const parsedCurrentDate = new Date(parseInt(Date.now(), 10));
 
         if(this.state.messages){
@@ -174,6 +187,15 @@ class ProductDetail extends Component{
                                         <MDBCardText>
                                             <small className='text-muted'>Price: </small> {this.state.messages} $
                                         </MDBCardText>
+                                        <br/>
+                                        <MDBCardText>Bidding historic: </MDBCardText>
+                                        {biddings.map((bidding) => {
+                                            if(bidding.product_id == parseInt(id)){
+                                                return <ol key={bidding.id} style={{ listStyleType: 'square' }} color="black">
+                                                    <li color="black">{bidding.email} -> {bidding.price}$</li>
+                                                </ol>
+                                            }
+                                        })}
                                         <br/>
                                         <small className='text-muted'>Don't bid more money than you have.</small>
                                         <br/>
@@ -239,6 +261,15 @@ class ProductDetail extends Component{
                                         <MDBCardText>
                                             <small className='text-muted'>Price: </small> {this.state.messages} $
                                         </MDBCardText>
+                                        <br/>
+                                        <MDBCardText>Bidding historic: </MDBCardText>
+                                        {biddings.map((bidding) => {
+                                            if(bidding.product_id == parseInt(id)){
+                                                return <ol key={bidding.id} style={{ listStyleType: 'square' }} color="black">
+                                                    <li color="black">{bidding.email} -> {bidding.price}$</li>
+                                                </ol>
+                                            }
+                                        })}
                                         <br/>
                                         <small className='text-muted'>Don't bid more money than you have.</small>
                                         <br/>
@@ -306,6 +337,15 @@ class ProductDetail extends Component{
                                             <small className='text-muted'>Price: </small> {product.price} $
                                         </MDBCardText>
                                         <br/>
+                                        <MDBCardText>Bidding historic: </MDBCardText>
+                                        {biddings.map((bidding) => {
+                                            if(bidding.product_id == parseInt(id)){
+                                                return <ol key={bidding.id} style={{ listStyleType: 'square' }} color="black">
+                                                    <li color="black">{bidding.email} -> {bidding.price}$</li>
+                                                </ol>
+                                            }
+                                        })}
+                                        <br/>
                                         <small className='text-muted'>Don't bid more money than you have.</small>
                                         <br/>
                                         <small className='text-muted'>If your price is the biggest, you win.</small>
@@ -370,6 +410,15 @@ class ProductDetail extends Component{
                                         <MDBCardText>
                                             <small className='text-muted'>Price: </small> {product.price} $
                                         </MDBCardText>
+                                        <br/>
+                                        <MDBCardText>Bidding historic: </MDBCardText>
+                                        {biddings.map((bidding) => {
+                                            if(bidding.product_id == parseInt(id)){
+                                                return <ol key={bidding.id} style={{ listStyleType: 'square' }} color="black">
+                                                    <li color="black">{bidding.email} -> {bidding.price}$</li>
+                                                </ol>
+                                            }
+                                        })}
                                         <br/>
                                         <small className='text-muted'>Don't bid more money than you have.</small>
                                         <br/>

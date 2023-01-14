@@ -12,7 +12,6 @@ import UnloggedDashboard from "./Dashboard/UnloggedDashboard";
 import SellProduct from "./SellProduct/SellProduct";
 import ProductDetails from "./Products/ProductDetails";
 import SocketMessage from "./SocketMessage";
-import Kafka from "./SellProduct/Kafka";
 import Profile from "./Login/Profile";
 
 class App extends Component {
@@ -42,7 +41,6 @@ class App extends Component {
                     <Route path='/home/products/:id'><ProductDetails/></Route>
                     <Route path='/details'><ProductDetails/></Route>
                     <Route path='/message'><SocketMessage/></Route>
-                    <Route path='/kafkaMessage'><Kafka/></Route>
                     <Route path='/profile'><Profile/></Route>
                 </Switch>
             </Router>
